@@ -13,6 +13,6 @@ router= APIRouter(
 async def create_role(role: schemas.RoleCreate, db: Session= Depends(get_db),user=Depends(oauth_shema)):
     return crud.create_role(db=db,role=role)
 
-@router.get("/get_role",response_model=list[schemas.Showrole])
+@router.get("/get_role",response_model=list[schemas.Showrole],user=Depends(oauth_shema))
 async def get_role(searh:str=None ,db: Session= Depends(get_db)):
     return crud.get_role(db,searh)
