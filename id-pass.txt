@@ -1,6 +1,2 @@
 
-email: jay12@gmail.com
-password : 123
-
-
-for all email password  - 123
+for all email password   is - 123

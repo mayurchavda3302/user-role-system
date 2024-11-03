@@ -40,10 +40,8 @@ def create_user(db:Session,user:schemas.UserCreate):
     return db_user
 
 
-def Get_user(db: Session,search_id:int=None,email:str=None):
-    if search_id:
-        return db.query(models.User).filter(models.User.id == search_id).first()
-    elif email:
+def Get_user(db: Session,email:str=None):
+    if email:
         return db.query(models.User).filter(models.User.email.like(f"%{email}%")).all()
     return db.query(models.User).all()
 

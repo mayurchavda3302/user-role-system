@@ -3,13 +3,13 @@ from sqlalchemy.orm import Session
 from app.config import setting,get_db
 from app import  models,JWT_token,hashing,schemas,crud,oauth2
 from fastapi.security import OAuth2PasswordRequestForm
+from typing import List
 
 ALGORITHM=setting.ALGORITHM
 SECRETKEY=setting.SECRETKEY
 
 myrouter = APIRouter(
-    tags=["Authantication"],
-    prefix="/user"
+    tags=["Authantication"]
 )
 
 
@@ -28,18 +28,24 @@ def Login(request:OAuth2PasswordRequestForm=Depends(), db: Session = Depends(get
 
 
 @myrouter.post("/signup")
-def singup(user: schemas.UserCreate,db:Session=Depends(get_db),req=Depends(oauth2.oauth_shema)):
+def singup(user: schemas.UserCreate,db:Session=Depends(get_db)):
     existing_user=crud.get_user_by_email(db,user.email)
     if existing_user:
          raise HTTPException(
               status_code=404,
               detail=f"user with this  email : {user.email}  aldery in database")
     new_user=crud.create_user(db,user)
-    return {"user created successfully ":new_user}
+    return {
+         "user created with ":user.email,
+
+        #  ""
+         }
+
   
 
-@myrouter.get("/get_user")
-def get_user(search_id:int= None,email:str=None,db:Session=Depends(get_db),req=Depends(oauth2.oauth_shema)):
-    return crud.Get_user(db,search_id,email)
+
+@myrouter.get("/get_user",response_model=list[schemas.show_user])
+def get_user(email:str=None,db:Session=Depends(get_db),req=Depends(oauth2.oauth_shema)):
+    return crud.Get_user(db,email)
 
 

@@ -14,8 +14,7 @@ class Role(Base):
     access_modules = Column(String)  
     created_at = Column(DateTime, default=datetime.utcnow)
     active = Column(Boolean, default=True)
-    
-    user = relationship("User", back_populates="role", lazy='noload')  #  unnecessary recursion
+    creator = relationship("User", back_populates="role")
 
 
 
@@ -28,5 +27,5 @@ class User(Base):
     email = Column(String(25), index=True, unique=True, nullable=False)
     password = Column(String(100), nullable=False) 
     role_id = Column(Integer, ForeignKey('roles.id'))
-
-    role = relationship("Role", back_populates="user", lazy='noload')
+    
+    role = relationship("Role", back_populates="creator")
